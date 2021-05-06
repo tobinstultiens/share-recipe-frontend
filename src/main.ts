@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Vue from "vue";
 import App from "./App.vue";
 import { mixinDetictingMobile } from "./mixins/device.detect";
@@ -10,6 +11,8 @@ import vuetify from "@/plugins/vuetify";
 import snotify from "@/plugins/vuesnotify";
 import { store } from "@/plugins/vuex";
 import VuePwaInstallPlugin from "vue-pwa-install";
+import IKweetService from "./interfaces/IKweetService";
+import KweetService from "./services/KweetService";
 
 Vue.config.productionTip = false;
 
@@ -22,17 +25,14 @@ const httpCommunicator: IHttpCommunicator = new HttpCommunicator(
 );
 
 //Service
-//const busSummaryService: IBusSummaryService = new BusSummaryService(
-//  httpCommunicator
-//);
+const kweetService: IKweetService = new KweetService(httpCommunicator);
 
 Vue.config.productionTip = false;
 // Vue.prototype.$workbox = workbox;
 Vue.use(VuePwaInstallPlugin);
 Vue.mixin(mixinDetictingMobile);
 
-// Vue.$authorizationService = authorizationService;
-// Vue.$busSummaryService = busSummaryService;
+Vue.$kweetService = kweetService;
 
 new Vue({
   vuetify,
