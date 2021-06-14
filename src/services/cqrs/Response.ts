@@ -4,5 +4,5 @@
  */
 export default interface Response {
   success: boolean;
-  errors: String[];
+  errors: string[];
 }

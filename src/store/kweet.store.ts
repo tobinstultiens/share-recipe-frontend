@@ -11,11 +11,13 @@ import {
 } from "vuex";
 import Kweet from "@/models/Kweet";
 import { setItem } from "@/helpers/LocalStorageUtility";
+import Pagination from "@/models/Pagination";
+import Vue from "vue";
 
 export interface IKweetState {
   cardVisible: boolean;
   detailsVisible: boolean;
-  cards: Array<Kweet> | null;
+  kweets: Array<Kweet> | null;
 }
 
 type AugmentedKweetActionContext = {
@@ -30,11 +32,14 @@ export interface IKweetGetters extends GetterTree<IKweetState, IRootState> {
 }
 
 export interface IKweetActions extends ActionTree<IKweetState, IRootState> {
-  setKweet({ commit }: AugmentedKweetActionContext): void;
+  setKweet(
+    { commit }: AugmentedKweetActionContext,
+    pagination: Pagination
+  ): void;
 }
 
 export interface IKweetMutations extends MutationTree<IKweetState> {
-  setKweetArray(state: IKweetState): void;
+  setKweetArray(state: IKweetState, kweet: Kweet[]): void;
 }
 
 export interface IKweetModule {
@@ -71,23 +76,23 @@ export default class KweetModule
   }
 
   private getKweetState(): IKweetState {
-    if (localStorage.getItem("card")) {
+    if (localStorage.getItem("kweet")) {
       const card: Array<Kweet> = JSON.parse(
-        localStorage.getItem("card")!
+        localStorage.getItem("kweet")!
       ) as Array<Kweet>;
-      return { cardVisible: true, detailsVisible: false, cards: card };
+      return { cardVisible: true, detailsVisible: false, kweets: card };
     }
     this.state = {
       cardVisible: true,
       detailsVisible: false,
-      cards: new Array<Kweet>(),
+      kweets: new Array<Kweet>(),
     };
     return this.state;
   }
 
   private getMutations(): IKweetMutations {
     const mutations: IKweetMutations = {
-      setKweetArray(state: IKweetState) {
+      setKweetArray(state: IKweetState, kweet: Kweet[]) {
         setItem("sup", null);
       },
     };
@@ -97,7 +102,7 @@ export default class KweetModule
   private getGetters(): IKweetGetters {
     const getters: IKweetGetters = {
       getKweetArray(state: IKweetState): Array<Kweet> {
-        return state.cards as Array<Kweet>;
+        return state.kweets as Array<Kweet>;
       },
     };
     return getters;
@@ -105,8 +110,13 @@ export default class KweetModule
 
   private getActions(): IKweetActions {
     const actions: IKweetActions = {
-      setKweet({ commit }: AugmentedKweetActionContext) {
-        return null;
+      setKweet(
+        { commit }: AugmentedKweetActionContext,
+        pagination: Pagination
+      ): void {
+        Vue.$kweetService.getKweets(pagination).then((res) => {
+          commit("setKweetArray", res.data);
+        });
       },
     };
     return actions;
