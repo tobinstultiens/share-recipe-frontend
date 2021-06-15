@@ -8,12 +8,17 @@
     <v-row v-model="kweets">
       <v-col :cols="6">
         <create-recipe class="mt-4" />
+        <div v-for="kweet in kweets" :key="kweet.id">
+          <v-col :cols="6">
+            <kweet-message
+              class="mt-4"
+              :username="kweet.displayName"
+              :message="kweet.kweet.message"
+              :imageUrl="kweet.image"
+            />
+          </v-col>
+        </div>
       </v-col>
-      <div v-for="kweet in kweets" :key="kweet.id">
-        <v-col :cols="6">
-          <kweet-message class="mt-4" :kweet="kweet" />
-        </v-col>
-      </div>
       <v-col class="mt-4" :cols="6">
         <v-text-field label="Search" outlined></v-text-field>
       </v-col>
@@ -49,7 +54,7 @@ import { Store } from "vuex";
   },
   beforeCreate() {
     this.$store.dispatch("kweet/setKweet", {
-      pageNumber: 0,
+      pageNumber: 1,
       pageSize: 25,
     });
   },

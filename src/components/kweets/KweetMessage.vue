@@ -8,7 +8,9 @@
         <v-list-item-subtitle>{{ message }}</v-list-item-subtitle>
       </v-list-item-content>
 
-      <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar>
+      <v-list-item-avatar tile size="80" color="grey">
+        <v-img :src="imageUrl"></v-img
+      ></v-list-item-avatar>
     </v-list-item>
   </v-card>
 </template>

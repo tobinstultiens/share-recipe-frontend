@@ -89,7 +89,8 @@ export default class KweetModule
   private getMutations(): IKweetMutations {
     const mutations: IKweetMutations = {
       setKweetArray(state: IKweetState, kweet: Kweet[]) {
-        setItem("kweet", kweet);
+        //setItem("kweet", kweet);
+        console.log(kweet);
         state.kweets = kweet;
       },
     };
@@ -112,7 +113,8 @@ export default class KweetModule
         pagination: Pagination
       ): void {
         Vue.$kweetService.getKweets(pagination).then((res) => {
-          commit("setKweetArray", res.data);
+          console.log(res);
+          commit("setKweetArray", res);
         });
       },
     };
