@@ -58,8 +58,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           allow: network.host
-          context: Src/
-          file: ./dockerfile
+          file: dockerfile
           platforms: linux/arm/v7,linux/amd64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
