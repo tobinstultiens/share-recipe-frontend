@@ -6,6 +6,9 @@
       <v-btn @click="logout">Log Out</v-btn>
     </v-app-bar>
     <v-row v-model="kweets">
+      <v-col :cols="6">
+        <create-recipe class="mt-4" />
+      </v-col>
       <div v-for="kweet in kweets" :key="kweet.id">
         <v-col :cols="6">
           <kweet-message class="mt-4" :kweet="kweet" />
@@ -27,6 +30,7 @@ import { Store } from "vuex";
 @Component({
   components: {
     kweetMessage: () => ComponentLoader("kweets/KweetMessage"),
+    createRecipe: () => ComponentLoader("recipes/CreateRecipe"),
   },
   methods: {
     logout() {
@@ -38,10 +42,16 @@ import { Store } from "vuex";
       get() {
         return (this.$store as Store<IRootState>).state.kweet.kweets;
       },
-      set(val) {
-        this.$store.commit("card/setCardArray", val);
+      set() {
+        //this.$store.commit("card/setCardArray", val);
       },
     },
+  },
+  beforeCreate() {
+    this.$store.dispatch("kweet/setKweet", {
+      pageNumber: 0,
+      pageSize: 25,
+    });
   },
 })
 export default class Home extends Vue {}

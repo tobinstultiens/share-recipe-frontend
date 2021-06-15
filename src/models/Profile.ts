@@ -1,5 +1,5 @@
 export default interface UserProfile {
-  userId: string;
+  userId?: string;
   userDisplayName: string;
   userProfileDescription: string;
   userProfileImage: string;

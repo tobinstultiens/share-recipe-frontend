@@ -7,6 +7,9 @@ export default interface KweetModel {
   image: string;
   kweet: Kweet;
 }
+export interface CreateKweet {
+  message: string;
+}
 export interface Kweet extends Entity {
   message: string;
   ingredients: Ingredient[];

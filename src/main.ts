@@ -17,6 +17,11 @@ import VuePwaInstallPlugin from "vue-pwa-install";
 import IKweetService from "./interfaces/IKweetService";
 import KweetService from "./services/KweetService";
 import Keycloak from "keycloak-js";
+import IProfileService from "./interfaces/IProfileService";
+import ProfileService from "./services/ProfileService";
+import UserProfile from "./models/Profile";
+import { setItem } from "./helpers/LocalStorageUtility";
+import User from "./models/User";
 
 Vue.config.productionTip = false;
 
@@ -30,6 +35,7 @@ const httpCommunicator: IHttpCommunicator = new HttpCommunicator(
 
 //Service
 const kweetService: IKweetService = new KweetService(httpCommunicator);
+const profileService: IProfileService = new ProfileService(httpCommunicator);
 
 Vue.config.productionTip = false;
 // Vue.prototype.$workbox = workbox;
@@ -37,6 +43,7 @@ Vue.use(VuePwaInstallPlugin);
 Vue.mixin(mixinDetictingMobile);
 
 Vue.$kweetService = kweetService;
+Vue.$profileService = profileService;
 
 const initOptions = {
   url: "https://keycloak.tstultiens.com/auth",
@@ -62,9 +69,21 @@ keycloak
         render: (h: any) => h(App),
       } as any).$mount("#app");
 
-      //console.log(keycloak.idToken);
+      console.log(keycloak.idToken);
       localStorage.setItem("vue-token", keycloak.token!);
       localStorage.setItem("vue-refresh-token", keycloak.refreshToken!);
+      const profile: UserProfile = {
+        userDisplayName: keycloak.idTokenParsed!.name!,
+        userProfileDescription: "",
+        userProfileImage:
+          "http://zultimate.com/wp-content/uploads/2019/12/default-profile.png",
+      };
+      const user: User = {
+        userId: keycloak.idToken!,
+        auth: { access_token: keycloak.idToken!, authId: "" },
+      };
+      setItem("user", user);
+      Vue.$profileService.setProfile(profile);
       Vue.$keycloak = keycloak;
     }
 

@@ -15,8 +15,6 @@ import Pagination from "@/models/Pagination";
 import Vue from "vue";
 
 export interface IKweetState {
-  cardVisible: boolean;
-  detailsVisible: boolean;
   kweets: Array<Kweet> | null;
 }
 
@@ -77,14 +75,12 @@ export default class KweetModule
 
   private getKweetState(): IKweetState {
     if (localStorage.getItem("kweet")) {
-      const card: Array<Kweet> = JSON.parse(
+      const kweet: Array<Kweet> = JSON.parse(
         localStorage.getItem("kweet")!
       ) as Array<Kweet>;
-      return { cardVisible: true, detailsVisible: false, kweets: card };
+      return { kweets: kweet };
     }
     this.state = {
-      cardVisible: true,
-      detailsVisible: false,
       kweets: new Array<Kweet>(),
     };
     return this.state;
@@ -93,7 +89,8 @@ export default class KweetModule
   private getMutations(): IKweetMutations {
     const mutations: IKweetMutations = {
       setKweetArray(state: IKweetState, kweet: Kweet[]) {
-        setItem("sup", null);
+        setItem("kweet", kweet);
+        state.kweets = kweet;
       },
     };
     return mutations;
