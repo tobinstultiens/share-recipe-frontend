@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Vue from "vue";
@@ -73,6 +74,7 @@ keycloak
       localStorage.setItem("vue-token", keycloak.token!);
       localStorage.setItem("vue-refresh-token", keycloak.refreshToken!);
       const profile: UserProfile = {
+        //@ts-ignore
         userDisplayName: keycloak.idTokenParsed!.name!,
         userProfileDescription: "",
         userProfileImage:

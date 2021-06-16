@@ -2,7 +2,6 @@ import IHttpCommunicator from "@/interfaces/IHttpCommunicator";
 import IKweetService from "@/interfaces/IKweetService";
 import Kweet, { CreateKweet } from "@/models/Kweet";
 import Pagination from "@/models/Pagination";
-import QueryResponse from "./cqrs/QueryResponse";
 import Response from "./cqrs/Response";
 
 export default class KweetService implements IKweetService {
@@ -12,8 +11,8 @@ export default class KweetService implements IKweetService {
   constructor(httpCommunicator: IHttpCommunicator) {
     this._httpCommunicator = httpCommunicator;
   }
-  getKweets(pagination: Pagination): Promise<QueryResponse<Kweet[]>> {
-    return this._httpCommunicator.get<QueryResponse<Kweet[]>>(
+  getKweets(pagination: Pagination): Promise<Kweet[]> {
+    return this._httpCommunicator.get<Kweet[]>(
       `${this._path}?page=${pagination.pageNumber}&size=${pagination.pageSize}`
     );
   }
